@@ -1,3 +1,9 @@
+import SearchBar from "./components/SearchBar";
+
 export default function Home() {
-  return <main className="min-h-screen p-24 py-8 text-stone-950">Hello</main>;
+  return (
+    <main className="min-h-screen py-24 px-8 text-stone-950">
+      <SearchBar />
+    </main>
+  );
 }
