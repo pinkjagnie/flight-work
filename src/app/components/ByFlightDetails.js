@@ -1,26 +1,91 @@
-import { IoMdAirplane } from "react-icons/io";
+import { format, parseISO } from "date-fns";
+
+import { IoIosAirplane } from "react-icons/io";
 
 const ByFlightDetails = ({ flight }) => {
+  const dateFormat = (dateString) => {
+    const date = parseISO(dateString);
+    return format(date, "yyyy-MM-dd");
+  };
+
+  const timeFormat = (timeString) => {
+    const date = parseISO(timeString);
+    return format(date, "HH:mm");
+  };
+
   return (
     <div key={flight.flight.iata}>
-      <div className="card-side rounded bg-base-100 shadow-xl">
-        <figure>
-          <IoMdAirplane className="text-xl text-gray-600" />
-        </figure>
-        <div className="card-body grow">
-          <h2 className="card-title">Flight - {flight.flight.iata}</h2>
-          <p>Flight date: {flight.flight_date}</p>
-          <p>Flight status: {flight.flight_status}</p>
-          <p>
-            Departure from: {flight.departure.airport} (
-            {flight.departure.timezone})
-          </p>
-          <p>
-            Arrival to: {flight.arrival.airport} ({flight.arrival.timezone})
-          </p>
-          <p>Airline: {flight.airline.name}</p>
-          <p>Flight number: {flight.flight.number}</p>
-          <p>IATA: {flight.flight.iata}</p>
+      <div className="card rounded bg-base-100 shadow-xl">
+        <div className="card-body p-0">
+          <div className="flex flex-col">
+            <div className="bg-gray-800 text-stone-100 text-center rounded-t py-4">
+              <h2 className="text-[1.5rem] font-bold">
+                Flight - {flight.flight.iata}
+              </h2>
+              <span className="font-medium pt-4">{flight.airline.name}</span>
+            </div>
+            <div className="bg-gray-800 text-stone-100 p-4">
+              <p className="pb-2">Flight date: {flight.flight_date}</p>
+              <p className="pb-2">Flight status: {flight.flight_status}</p>
+              <p className="pb-2">Flight number: {flight.flight.number}</p>
+              <p className="pb-2">IATA: {flight.flight.iata}</p>
+            </div>
+          </div>
+          <div className="p-4">
+            <div className="flex justify-between items-center mb-4">
+              <div className="text-center">
+                <div className="text-gray-500">{flight.departure.iata}</div>
+                <div className="text-lg font-semibold">
+                  {flight.departure.airport}
+                </div>
+                <div className="text-gray-500">
+                  {dateFormat(flight.departure.scheduled)}
+                </div>
+              </div>
+              <div className="relative">
+                <div className="w-[3rem] h-[3rem] rounded-full bg-gray-800">
+                  <IoIosAirplane className="text-[1.8rem] font-bold text-stone-100 relative top-[calc(50%-0.9rem)] left-[calc(50%-0.9rem)]" />
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-gray-500">{flight.arrival.iata}</div>
+                <div className="text-lg font-semibold">
+                  {flight.arrival.airport}
+                </div>
+                <div className="text-gray-500">
+                  {dateFormat(flight.arrival.scheduled)}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between mb-2">
+              <div className="text-center">
+                <div className="text-gray-500">SCHEDULED</div>
+                <div className="text-lg font-semibold">
+                  {timeFormat(flight.departure.scheduled)}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-gray-500">SCHEDULED</div>
+                <div className="text-lg font-semibold">
+                  {timeFormat(flight.arrival.scheduled)}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between mb-4">
+              <div className="text-center">
+                <div className="text-gray-500">ESTIMATED</div>
+                <div className="text-lg font-semibold">
+                  {timeFormat(flight.departure.estimated)}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-gray-500">ESTIMATED</div>
+                <div className="text-lg font-semibold">
+                  {timeFormat(flight.arrival.estimated)}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
