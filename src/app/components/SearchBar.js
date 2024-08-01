@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { PiAirplaneTiltFill } from "react-icons/pi";
 import { SlMagnifier } from "react-icons/sl";
 
+import Loading from "./Loading";
 import ByFlightDetails from "./ByFlightDetails";
 
 const SearchBar = () => {
@@ -17,6 +18,7 @@ const SearchBar = () => {
     arrivalAirport: "",
   });
   const [flightData, setFlightData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const flightChangeHandler = (e) => {
     setFlightNumber(e.target.value);
@@ -62,6 +64,8 @@ const SearchBar = () => {
 
   useEffect(() => {
     const fetchFlightData = async () => {
+      setLoading(true);
+
       // BY FLIGHT NUMBER
       if (query.flight) {
         const flight = query.flight;
@@ -133,6 +137,8 @@ const SearchBar = () => {
 
         setArrivalAirport("");
       }
+
+      setLoading(false);
     };
 
     fetchFlightData();
@@ -206,7 +212,9 @@ const SearchBar = () => {
         </p>
       </form>
 
-      {flightData && flightData.length > 0 && (
+      {loading && !flightData && <Loading />}
+
+      {flightData && flightData.length > 0 && !loading && (
         <div className="grid grid-row gap-y-8 mt-10">
           {flightData.map((flight) => {
             return (
