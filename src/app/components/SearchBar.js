@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { SlMagnifier } from "react-icons/sl";
 
+import ByFlightDetails from "./ByFlightDetails";
+
 const SearchBar = () => {
   const [flightNumber, setFlightNumber] = useState("");
   const [airport, setAirport] = useState("");
@@ -111,13 +113,12 @@ const SearchBar = () => {
       </form>
 
       {flightData && flightData.length > 0 && (
-        <div>
+        <div className="grid grid-row gap-y-8 mt-10">
           {flightData.map((flight) => {
             return (
-              <>
-                <div>{flight.flight_date}</div>
-                <p>{flight.departure.airport}</p>
-              </>
+              <div key={flight.flight.iata}>
+                <ByFlightDetails flight={flight} />
+              </div>
             );
           })}
         </div>
