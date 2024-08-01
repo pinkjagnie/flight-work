@@ -8,35 +8,37 @@ import ByFlightDetails from "./ByFlightDetails";
 
 const SearchBar = () => {
   const [flightNumber, setFlightNumber] = useState("");
-  const [airport, setAirport] = useState("");
-  const [query, setQuery] = useState({ flight: "", airport: "" });
+  const [departureAirport, setDepartureAirport] = useState("");
+  const [query, setQuery] = useState({ flight: "", departureAirport: "" });
   const [flightData, setFlightData] = useState(null);
 
   const flightChangeHandler = (e) => {
     setFlightNumber(e.target.value);
   };
 
-  const airportChangeHandler = (e) => {
-    setAirport(e.target.value);
+  const departureAirportChangeHandler = (e) => {
+    setDepartureAirport(e.target.value);
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if ((flightNumber && airport) || (!flightNumber && !airport)) {
+    if (
+      (flightNumber && departureAirport) ||
+      (!flightNumber && !departureAirport)
+    ) {
       alert("Please fill in only one field");
     } else if (flightNumber) {
-      setQuery({ flight: flightNumber, airport: "" });
-    } else if (airport) {
-      setQuery({ flight: "", airport: airport });
+      setQuery({ flight: flightNumber, departureAirport: "" });
+    } else if (departureAirport) {
+      setQuery({ flight: "", departureAirport: departureAirport });
     }
   };
 
   useEffect(() => {
     const fetchFlightData = async () => {
+      // BY FLIGHT NUMBER
       if (query.flight) {
-        // TBD - search by flight number
-
         const flight = query.flight;
 
         try {
@@ -49,22 +51,37 @@ const SearchBar = () => {
 
           const res = await response.json();
 
-          console.log("WYYYYYYYYYYYNIIIIIIIIIIIIIK " + res[0].flight_date);
+          setFlightData(res);
+        } catch (error) {
+          console.log(error);
+        }
+
+        setFlightNumber("");
+      }
+
+      // BY DEPARTURE AIRPORT
+      if (query.departureAirport) {
+        const departureAirport = query.departureAirport;
+
+        try {
+          const response = await fetch(
+            "api/get-departure-airport/" + departureAirport,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const res = await response.json();
 
           setFlightData(res);
         } catch (error) {
           console.log(error);
         }
 
-        console.log("Searching flight:", query.flight);
-
-        setFlightNumber("");
-      }
-
-      if (query.airport) {
-        // TBD - search by airport
-        console.log("Searching airport:", query.airport);
-        setAirport("");
+        setDepartureAirport("");
       }
     };
 
@@ -101,15 +118,18 @@ const SearchBar = () => {
           <input
             type="search"
             name="searchAirport"
-            placeholder="Search for airport"
+            placeholder="Search for departure airport"
             className="bg-gray-100 text-gray-700 w-[80%] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-            value={airport}
-            onChange={airportChangeHandler}
+            value={departureAirport}
+            onChange={departureAirportChangeHandler}
           />
           <button type="submit" className="-ml-12">
             <SlMagnifier size={30} className="text-gray-600" />
           </button>
         </div>
+        <p className="italic text-xs font-medium text-stone-100 self-start pl-[3rem] md:pl-[5rem] lg:pl-[6rem] xl:pl-[8rem] pt-2">
+          Search by IATA code
+        </p>
       </form>
 
       {flightData && flightData.length > 0 && (
