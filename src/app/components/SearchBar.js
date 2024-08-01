@@ -1,12 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { SlMagnifier } from "react-icons/sl";
 
 const SearchBar = () => {
   const [flightNumber, setFlightNumber] = useState("");
   const [airport, setAirport] = useState("");
+  const [query, setQuery] = useState({ flight: "", airport: "" });
+
+  const flightChangeHandler = (e) => {
+    setFlightNumber(e.target.value);
+  };
+
+  const airportChangeHandler = (e) => {
+    setAirport(e.target.value);
+  };
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -14,15 +23,24 @@ const SearchBar = () => {
     if ((flightNumber && airport) || (!flightNumber && !airport)) {
       alert("Please fill in only one field");
     } else if (flightNumber) {
-      console.log("Searching flight:", flightNumber);
-      // TBD - search by flight number
-      setFlightNumber("");
+      setQuery({ flight: flightNumber, airport: "" });
     } else if (airport) {
-      console.log("Searching airport:", airport);
-      // TBD - search by airport
-      setAirport("");
+      setQuery({ flight: "", airport: airport });
     }
   };
+
+  useEffect(() => {
+    if (query.flight) {
+      // TBD - search by flight number
+      console.log("Searching flight:", query.flight);
+      setFlightNumber("");
+    }
+    if (query.airport) {
+      // TBD - search by airport
+      console.log("Searching airport:", query.airport);
+      setAirport("");
+    }
+  }, [query]);
 
   return (
     <div>
@@ -39,7 +57,7 @@ const SearchBar = () => {
             placeholder="Search for flight"
             className="bg-gray-100 text-gray-700 w-[80%] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             value={flightNumber}
-            onChange={(e) => setFlightNumber(e.target.value)}
+            onChange={flightChangeHandler}
           />
           <button type="submit" className="-ml-12">
             <SlMagnifier size={30} className="text-gray-600" />
@@ -57,7 +75,7 @@ const SearchBar = () => {
             placeholder="Search for airport"
             className="bg-gray-100 text-gray-700 w-[80%] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             value={airport}
-            onChange={(e) => setAirport(e.target.value)}
+            onChange={airportChangeHandler}
           />
           <button type="submit" className="-ml-12">
             <SlMagnifier size={30} className="text-gray-600" />
