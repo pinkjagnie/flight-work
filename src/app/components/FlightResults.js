@@ -4,7 +4,9 @@ const FlightResults = ({ flightData }) => {
   return (
     <div className="grid grid-row gap-y-8 mt-10">
       {flightData.map((flight) => (
-        <div key={flight.flight.iata}>
+        <div
+          key={flight.flight.iata + flight.flight_date + flight.departure.iata}
+        >
           <ByFlightDetails flight={flight} />
         </div>
       ))}
