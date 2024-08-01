@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { PiAirplaneTiltFill } from "react-icons/pi";
-import { SlMagnifier } from "react-icons/sl";
 
+import SearchForm from "./SearchForm";
 import Loading from "./Loading";
 import ErrorMsg from "./ErrorMsg";
 import FlightResults from "./FlightResults";
@@ -178,64 +178,16 @@ const SearchBar = () => {
         </p>
         <PiAirplaneTiltFill className="hidden md:visible md:block md:text-3xl" />
       </div>
-      <form
-        className="w-[90%] md:w-[80%] py-10 mt-10 mx-auto rounded-md bg-gray-600 flex flex-col items-center justify-center"
-        onSubmit={submitHandler}
-      >
-        {/* SINGLE FLIGHT */}
-        <div className="w-[100%] flex items-center justify-center">
-          <input
-            type="search"
-            name="searchFlight"
-            placeholder="Search for flight"
-            className="bg-gray-100 text-gray-700 w-[80%] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-            value={flightNumber}
-            onChange={flightChangeHandler}
-          />
-          <button type="submit" className="-ml-12">
-            <SlMagnifier size={30} className="text-gray-600" />
-          </button>
-        </div>
-        <p className="italic text-xs font-medium text-stone-100 self-start pl-[3rem] md:pl-[5rem] lg:pl-[6rem] xl:pl-[8rem] pt-2">
-          Search by flight number
-        </p>
 
-        {/* AIRPORT SEARCH */}
-        <div className="w-[100%] flex items-center justify-center pt-10">
-          <input
-            type="search"
-            name="searchAirport"
-            placeholder="Search for departure airport"
-            className="bg-gray-100 text-gray-700 w-[80%] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-            value={departureAirport}
-            onChange={departureAirportChangeHandler}
-          />
-          <button type="submit" className="-ml-12">
-            <SlMagnifier size={30} className="text-gray-600" />
-          </button>
-        </div>
-        <p className="italic text-xs font-medium text-stone-100 self-start pl-[3rem] md:pl-[5rem] lg:pl-[6rem] xl:pl-[8rem] pt-2">
-          Search by IATA code
-        </p>
-
-        {/* -> ARRIVAL */}
-        <div className="w-[100%] flex items-center justify-center pt-10">
-          <input
-            type="search"
-            name="searchAirport"
-            placeholder="Search for arrival airport"
-            className="bg-gray-100 text-gray-700 w-[80%] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-            value={arrivalAirport}
-            onChange={arrivalAirportChangeHandler}
-          />
-          <button type="submit" className="-ml-12">
-            <SlMagnifier size={30} className="text-gray-600" />
-          </button>
-        </div>
-        <p className="italic text-xs font-medium text-stone-100 self-start pl-[3rem] md:pl-[5rem] lg:pl-[6rem] xl:pl-[8rem] pt-2">
-          Search by IATA code
-        </p>
-      </form>
+      <SearchForm
+        flightNumber={flightNumber}
+        departureAirport={departureAirport}
+        arrivalAirport={arrivalAirport}
+        flightChangeHandler={flightChangeHandler}
+        departureAirportChangeHandler={departureAirportChangeHandler}
+        arrivalAirportChangeHandler={arrivalAirportChangeHandler}
+        submitHandler={submitHandler}
+      />
 
       {loading && !errorMsg && <Loading />}
       {errorMsg && !loading && <ErrorMsg message={errorMsg} />}
