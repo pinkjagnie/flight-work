@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { PiAirplaneTiltFill } from "react-icons/pi";
 import { SlMagnifier } from "react-icons/sl";
 
 import ByFlightDetails from "./ByFlightDetails";
@@ -140,6 +141,12 @@ const SearchBar = () => {
   return (
     <div>
       {/* Search bar */}
+      <div className="flex justify-center items-center font-medium text-lg text-gray-900 px-4">
+        <p className="text-center pr-2">
+          When searching, fill out only one field at a time
+        </p>
+        <PiAirplaneTiltFill className="hidden md:visible md:block md:text-3xl" />
+      </div>
       <form
         className="w-[90%] md:w-[80%] py-10 mt-10 mx-auto rounded-md bg-gray-600 flex flex-col items-center justify-center"
         onSubmit={submitHandler}
