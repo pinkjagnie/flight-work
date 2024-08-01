@@ -19,8 +19,6 @@ export async function GET(req, { params }) {
 
     console.log(res.data);
 
-    // const flights = res.data;
-
     return NextResponse.json(res.data);
   } catch (error) {
     console.log(error);
