@@ -6,6 +6,7 @@ import { PiAirplaneTiltFill } from "react-icons/pi";
 import { SlMagnifier } from "react-icons/sl";
 
 import Loading from "./Loading";
+import ErrorMsg from "./ErrorMsg";
 import ByFlightDetails from "./ByFlightDetails";
 
 const SearchBar = () => {
@@ -19,6 +20,7 @@ const SearchBar = () => {
   });
   const [flightData, setFlightData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const flightChangeHandler = (e) => {
     setFlightNumber(e.target.value);
@@ -65,6 +67,7 @@ const SearchBar = () => {
   useEffect(() => {
     const fetchFlightData = async () => {
       setLoading(true);
+      setErrorMsg("");
 
       // BY FLIGHT NUMBER
       if (query.flight) {
@@ -81,7 +84,13 @@ const SearchBar = () => {
           const res = await response.json();
 
           setFlightData(res);
+
+          if (res.length == 0) {
+            setErrorMsg("No flights with this number found! Please try again");
+          }
         } catch (error) {
+          setLoading(false);
+          setErrorMsg("Ups! Something went wrong! Try again");
           console.log(error);
         }
 
@@ -106,7 +115,15 @@ const SearchBar = () => {
           const res = await response.json();
 
           setFlightData(res);
+
+          if (res.length == 0) {
+            setErrorMsg(
+              "No such airport found! Make sure you enter the IATA code"
+            );
+          }
         } catch (error) {
+          setLoading(false);
+          setErrorMsg("Ups! Something went wrong! Try again");
           console.log(error);
         }
 
@@ -131,7 +148,15 @@ const SearchBar = () => {
           const res = await response.json();
 
           setFlightData(res);
+
+          if (res.length == 0) {
+            setErrorMsg(
+              "No such airport found! Make sure you enter the IATA code"
+            );
+          }
         } catch (error) {
+          setLoading(false);
+          setErrorMsg("Ups! Something went wrong! Try again");
           console.log(error);
         }
 
@@ -212,7 +237,8 @@ const SearchBar = () => {
         </p>
       </form>
 
-      {loading && !flightData && <Loading />}
+      {loading && !errorMsg && <Loading />}
+      {errorMsg && !loading && <ErrorMsg message={errorMsg} />}
 
       {flightData && flightData.length > 0 && !loading && (
         <div className="grid grid-row gap-y-8 mt-10">
