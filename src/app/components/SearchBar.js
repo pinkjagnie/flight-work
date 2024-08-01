@@ -8,6 +8,7 @@ const SearchBar = () => {
   const [flightNumber, setFlightNumber] = useState("");
   const [airport, setAirport] = useState("");
   const [query, setQuery] = useState({ flight: "", airport: "" });
+  const [flightData, setFlightData] = useState(null);
 
   const flightChangeHandler = (e) => {
     setFlightNumber(e.target.value);
@@ -30,16 +31,42 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
-    if (query.flight) {
-      // TBD - search by flight number
-      console.log("Searching flight:", query.flight);
-      setFlightNumber("");
-    }
-    if (query.airport) {
-      // TBD - search by airport
-      console.log("Searching airport:", query.airport);
-      setAirport("");
-    }
+    const fetchFlightData = async () => {
+      if (query.flight) {
+        // TBD - search by flight number
+
+        const flight = query.flight;
+
+        try {
+          const response = await fetch("api/get-flight/" + flight, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          const res = await response.json();
+
+          console.log("WYYYYYYYYYYYNIIIIIIIIIIIIIK " + res[0].flight_date);
+
+          setFlightData(res);
+        } catch (error) {
+          console.log(error);
+        }
+
+        console.log("Searching flight:", query.flight);
+
+        setFlightNumber("");
+      }
+
+      if (query.airport) {
+        // TBD - search by airport
+        console.log("Searching airport:", query.airport);
+        setAirport("");
+      }
+    };
+
+    fetchFlightData();
   }, [query]);
 
   return (
@@ -82,6 +109,19 @@ const SearchBar = () => {
           </button>
         </div>
       </form>
+
+      {flightData && flightData.length > 0 && (
+        <div>
+          {flightData.map((flight) => {
+            return (
+              <>
+                <div>{flight.flight_date}</div>
+                <p>{flight.departure.airport}</p>
+              </>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
