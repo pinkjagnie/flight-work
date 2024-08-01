@@ -9,6 +9,12 @@ import Loading from "./Loading";
 import ErrorMsg from "./ErrorMsg";
 import FlightResults from "./FlightResults";
 
+import {
+  fetchByFlightNumber,
+  fetchByDepartureAirport,
+  fetchByArrivalAirport,
+} from "../../lib/fetchFlights";
+
 const SearchBar = () => {
   const [flightNumber, setFlightNumber] = useState("");
   const [departureAirport, setDepartureAirport] = useState("");
@@ -71,95 +77,34 @@ const SearchBar = () => {
 
       // BY FLIGHT NUMBER
       if (query.flight) {
-        const flight = query.flight;
-
-        try {
-          const response = await fetch("api/get-flight/" + flight, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          const res = await response.json();
-
-          setFlightData(res);
-
-          if (res.length == 0) {
-            setErrorMsg("No flights with this number found! Please try again");
-          }
-        } catch (error) {
-          setLoading(false);
-          setErrorMsg("Ups! Something went wrong! Try again");
-          console.log(error);
-        }
-
+        await fetchByFlightNumber(
+          query.flight,
+          setFlightData,
+          setErrorMsg,
+          setLoading
+        );
         setFlightNumber("");
       }
 
       // BY DEPARTURE AIRPORT
       if (query.departureAirport) {
-        const departureAirport = query.departureAirport;
-
-        try {
-          const response = await fetch(
-            "api/get-departure-airport/" + departureAirport,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          const res = await response.json();
-
-          setFlightData(res);
-
-          if (res.length == 0) {
-            setErrorMsg(
-              "No such airport found! Make sure you enter the IATA code"
-            );
-          }
-        } catch (error) {
-          setLoading(false);
-          setErrorMsg("Ups! Something went wrong! Try again");
-          console.log(error);
-        }
-
+        await fetchByDepartureAirport(
+          query.departureAirport,
+          setFlightData,
+          setErrorMsg,
+          setLoading
+        );
         setDepartureAirport("");
       }
 
       // BY ARRIVAL AIRPORT
       if (query.arrivalAirport) {
-        const arrivalAirport = query.arrivalAirport;
-
-        try {
-          const response = await fetch(
-            "api/get-arrival-airport/" + arrivalAirport,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          const res = await response.json();
-
-          setFlightData(res);
-
-          if (res.length == 0) {
-            setErrorMsg(
-              "No such airport found! Make sure you enter the IATA code"
-            );
-          }
-        } catch (error) {
-          setLoading(false);
-          setErrorMsg("Ups! Something went wrong! Try again");
-          console.log(error);
-        }
-
+        await fetchByArrivalAirport(
+          query.arrivalAirport,
+          setFlightData,
+          setErrorMsg,
+          setLoading
+        );
         setArrivalAirport("");
       }
 
