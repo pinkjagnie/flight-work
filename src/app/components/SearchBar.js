@@ -9,7 +9,12 @@ import ByFlightDetails from "./ByFlightDetails";
 const SearchBar = () => {
   const [flightNumber, setFlightNumber] = useState("");
   const [departureAirport, setDepartureAirport] = useState("");
-  const [query, setQuery] = useState({ flight: "", departureAirport: "" });
+  const [arrivalAirport, setArrivalAirport] = useState("");
+  const [query, setQuery] = useState({
+    flight: "",
+    departureAirport: "",
+    arrivalAirport: "",
+  });
   const [flightData, setFlightData] = useState(null);
 
   const flightChangeHandler = (e) => {
@@ -20,18 +25,37 @@ const SearchBar = () => {
     setDepartureAirport(e.target.value);
   };
 
+  const arrivalAirportChangeHandler = (e) => {
+    setArrivalAirport(e.target.value);
+  };
+
   const submitHandler = (event) => {
     event.preventDefault();
 
     if (
-      (flightNumber && departureAirport) ||
-      (!flightNumber && !departureAirport)
+      (flightNumber && (departureAirport || arrivalAirport)) ||
+      (!flightNumber && !departureAirport && !arrivalAirport) ||
+      (departureAirport && arrivalAirport)
     ) {
       alert("Please fill in only one field");
     } else if (flightNumber) {
-      setQuery({ flight: flightNumber, departureAirport: "" });
+      setQuery({
+        flight: flightNumber,
+        departureAirport: "",
+        arrivalAirport: "",
+      });
     } else if (departureAirport) {
-      setQuery({ flight: "", departureAirport: departureAirport });
+      setQuery({
+        flight: "",
+        departureAirport: departureAirport,
+        arrivalAirport: "",
+      });
+    } else if (arrivalAirport) {
+      setQuery({
+        flight: "",
+        departureAirport: "",
+        arrivalAirport: arrivalAirport,
+      });
     }
   };
 
@@ -83,6 +107,31 @@ const SearchBar = () => {
 
         setDepartureAirport("");
       }
+
+      // BY ARRIVAL AIRPORT
+      if (query.arrivalAirport) {
+        const arrivalAirport = query.arrivalAirport;
+
+        try {
+          const response = await fetch(
+            "api/get-arrival-airport/" + arrivalAirport,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const res = await response.json();
+
+          setFlightData(res);
+        } catch (error) {
+          console.log(error);
+        }
+
+        setArrivalAirport("");
+      }
     };
 
     fetchFlightData();
@@ -122,6 +171,24 @@ const SearchBar = () => {
             className="bg-gray-100 text-gray-700 w-[80%] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             value={departureAirport}
             onChange={departureAirportChangeHandler}
+          />
+          <button type="submit" className="-ml-12">
+            <SlMagnifier size={30} className="text-gray-600" />
+          </button>
+        </div>
+        <p className="italic text-xs font-medium text-stone-100 self-start pl-[3rem] md:pl-[5rem] lg:pl-[6rem] xl:pl-[8rem] pt-2">
+          Search by IATA code
+        </p>
+
+        {/* -> ARRIVAL */}
+        <div className="w-[100%] flex items-center justify-center pt-10">
+          <input
+            type="search"
+            name="searchAirport"
+            placeholder="Search for arrival airport"
+            className="bg-gray-100 text-gray-700 w-[80%] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+            value={arrivalAirport}
+            onChange={arrivalAirportChangeHandler}
           />
           <button type="submit" className="-ml-12">
             <SlMagnifier size={30} className="text-gray-600" />
