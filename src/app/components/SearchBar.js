@@ -7,7 +7,7 @@ import { SlMagnifier } from "react-icons/sl";
 
 import Loading from "./Loading";
 import ErrorMsg from "./ErrorMsg";
-import ByFlightDetails from "./ByFlightDetails";
+import FlightResults from "./FlightResults";
 
 const SearchBar = () => {
   const [flightNumber, setFlightNumber] = useState("");
@@ -241,15 +241,7 @@ const SearchBar = () => {
       {errorMsg && !loading && <ErrorMsg message={errorMsg} />}
 
       {flightData && flightData.length > 0 && !loading && (
-        <div className="grid grid-row gap-y-8 mt-10">
-          {flightData.map((flight) => {
-            return (
-              <div key={flight.flight.iata}>
-                <ByFlightDetails flight={flight} />
-              </div>
-            );
-          })}
-        </div>
+        <FlightResults flightData={flightData} />
       )}
     </div>
   );
