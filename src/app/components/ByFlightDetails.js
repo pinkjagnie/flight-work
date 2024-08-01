@@ -1,6 +1,6 @@
 import { format, parseISO } from "date-fns";
 
-import { IoIosAirplane } from "react-icons/io";
+// import { IoIosAirplane } from "react-icons/io";
 
 const ByFlightDetails = ({ flight }) => {
   const dateFormat = (dateString) => {
@@ -31,8 +31,11 @@ const ByFlightDetails = ({ flight }) => {
               <p className="pb-2">IATA: {flight.flight.iata}</p>
             </div>
           </div>
-          <div className="p-4">
-            <div className="flex justify-between items-center mb-4">
+
+          {/* MORE DETAILS OF FLIGHT */}
+          <div className="grid grid-cols-2 gap-2 p-4">
+            {/* DEPARTURE */}
+            <div className="flex flex-col justify-between items-center mb-4">
               <div className="text-center">
                 <div className="text-gray-500">{flight.departure.iata}</div>
                 <div className="text-lg font-semibold">
@@ -42,11 +45,9 @@ const ByFlightDetails = ({ flight }) => {
                   {dateFormat(flight.departure.scheduled)}
                 </div>
               </div>
-              <div className="relative">
-                <div className="w-[3rem] h-[3rem] rounded-full bg-gray-800">
-                  <IoIosAirplane className="text-[1.8rem] font-bold text-stone-100 relative top-[calc(50%-0.9rem)] left-[calc(50%-0.9rem)]" />
-                </div>
-              </div>
+            </div>
+            {/* ARRIVAL */}
+            <div className="flex flex-col justify-between mb-2">
               <div className="text-center">
                 <div className="text-gray-500">{flight.arrival.iata}</div>
                 <div className="text-lg font-semibold">
@@ -57,32 +58,32 @@ const ByFlightDetails = ({ flight }) => {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between mb-2">
-              <div className="text-center">
-                <div className="text-gray-500">SCHEDULED</div>
-                <div className="text-lg font-semibold">
-                  {timeFormat(flight.departure.scheduled)}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-gray-500">SCHEDULED</div>
-                <div className="text-lg font-semibold">
-                  {timeFormat(flight.arrival.scheduled)}
-                </div>
+
+            {/* MORE SPECIFICS */}
+            {/* DEPARTURE */}
+            <div className="text-center pt-4">
+              <div className="text-gray-500">SCHEDULED</div>
+              <div className="text-lg font-semibold">
+                {timeFormat(flight.departure.scheduled)}
               </div>
             </div>
-            <div className="flex justify-between mb-4">
-              <div className="text-center">
-                <div className="text-gray-500">ESTIMATED</div>
-                <div className="text-lg font-semibold">
-                  {timeFormat(flight.departure.estimated)}
-                </div>
+            <div className="text-center pt-4 pb-4">
+              <div className="text-gray-500">ESTIMATED</div>
+              <div className="text-lg font-semibold">
+                {timeFormat(flight.departure.estimated)}
               </div>
-              <div className="text-center">
-                <div className="text-gray-500">ESTIMATED</div>
-                <div className="text-lg font-semibold">
-                  {timeFormat(flight.arrival.estimated)}
-                </div>
+            </div>
+            {/* ARRIVAL */}
+            <div className="text-center pt-4">
+              <div className="text-gray-500">SCHEDULED</div>
+              <div className="text-lg font-semibold">
+                {timeFormat(flight.arrival.scheduled)}
+              </div>
+            </div>
+            <div className="text-center pt-4 pb-4">
+              <div className="text-gray-500">ESTIMATED</div>
+              <div className="text-lg font-semibold">
+                {timeFormat(flight.arrival.estimated)}
               </div>
             </div>
           </div>
